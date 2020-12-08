@@ -1,0 +1,136 @@
+<template>
+  <div id="home">
+    <div id="top">
+      <my-header />
+      <my-nav-tab />
+    </div>
+    <div id="main">
+      <div>
+        <my-main :loveList="loveList" :key="loveList._id" />
+        <my-movie-list :movieList="movieList" :key="movieList.id" />
+      </div>
+    </div>
+    <div id="footer">
+      <my-footer />
+    </div>
+  </div>
+</template>
+
+<script>
+//引入betterScroll插件
+import BetterScroll from "better-scroll";
+// import qs from "qs";
+import { getListApi, getMovieApi,getMovieMoreApi } from "../utils/api";
+import MyHeader from "../components/home/MyHeader";
+import MyNavTab from "../components/home/MyNavTab";
+import MyMain from "../components/home/MyMain";
+import MyMovieList from "../components/home/MyMovieList";
+import MyFooter from "../components/home/MyFooter";
+export default {
+  data() {
+    return {
+      loveList: [],
+      movieList: [],
+      //总条数
+      count: 0,
+      //所有的电影id
+      ids:[],
+      //从第几个ids获取
+      start:0,
+      //每次获取几条数据
+      num:5
+    };
+  },
+  mounted() {
+    this.getList();
+    this.getMovie();
+  },
+  methods: {
+    async getList() {
+      let res = await getListApi();
+      if (res.status === 0) {
+        this.loveList = res.result;
+      }
+    },
+    async getMovie() {
+      let res = await getMovieApi();
+      if (res.status === 0) {
+        this.movieList = res.result;
+        this.count = res.count;
+        this.ids = res.ids;
+        this.start = this.movieList.length;
+        await this.$nextTick();
+        const bs = new BetterScroll('#main', {
+          scrollX: false,
+          scrollY: true,
+          click: true,
+          pullUpLoad: true
+        });
+
+        // bs.on('pullingUp', async () =>{
+        //   fetch("http://pudge.wang:3080/api/movies/more", {
+        //     method: 'POST',
+        //     headers: {
+        //       "Content-Type": "application/x-www-form-urlencoded"
+        //     },
+        //     body: qs.stringify({
+        //       ids:str
+        //     })
+        //   }).then(res => res.json()).then(json => {
+        //     if(json.status === 0){
+        //       this.movieList = this.movieList.concat(json.result)
+        //     };
+        //   })
+        // })
+        //     await this.$nextTick();
+        //     bs.refresh();
+        bs.on("pullingUp",async ()=>{
+        const arr = this.ids.slice(this.start,this.start + this.num);
+        this.start += this.num;
+        const str = arr.join();
+          const res = await getMovieMoreApi({ids:str});
+          this.movieList = this.movieList.concat(res.result);
+          await this.$nextTick();
+          bs.refresh();
+          if(this.start<= this.count){
+            bs.finishPullUp();
+          }
+        })
+      };
+    }
+  },
+  components: {
+    MyHeader,
+    MyNavTab,
+    MyMain,
+    MyMovieList,
+    MyFooter
+  }
+};
+</script>
+<style lang="scss" scoped>
+#top {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 156px;
+  overflow: hidden;
+  z-index: 999;
+}
+#main {
+  position: absolute;
+  top: 156px;
+  left: 0;
+  right: 0;
+  bottom: 48px;
+  overflow: hidden;
+}
+#footer {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  height: 49px;
+  background: white;
+}
+</style>

@@ -1,0 +1,17 @@
+$theme-color: #e54847;
+$active-color: #333;
+$border-color: #e6e6e6;
+
+//文字水平垂直居中
+@mixin wordCenter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+//文字溢出隐藏
+@mixin wordMix{
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
