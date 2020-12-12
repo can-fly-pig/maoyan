@@ -53,7 +53,7 @@ export default {
     margin-bottom: 12px;
     font-size: 15px;
   }
-  .sc{
+  .sc {
     width: 343px;
     height: 145px;
     overflow: hidden;

@@ -19,16 +19,17 @@
       </div>
     </div>
     <nav>
-      <address>杭州</address>
+      <address @click = "citychoise">{{ city.name }}</address>
       <ul>
-        <li
+        <router-link
+          tag="li"
           v-for="(item, index) in msg"
           :key="index"
-          @click="change(index)"
-          :class="{ active: index == num }"
+          :to="item.url"
+          active-class="active"
         >
-          {{ item }}
-        </li>
+          {{ item.title }}
+        </router-link>
       </ul>
       <span class="iconfont icon-fangdajing"></span>
     </nav>
@@ -39,13 +40,38 @@
 export default {
   data() {
     return {
-      msg: ["热映", "影院", "待映", "热播"],
+      msg: [
+        {
+          title: "热映",
+          url: "/movie/hot"
+        },
+        {
+          title: "影院",
+          url: "/movie/cinema"
+        },
+        {
+          title: "待映",
+          url: "/movie/wait"
+        },
+        {
+          title: "热播",
+          url: "/movie/broadcast"
+        }
+      ],
       num: 0
     };
   },
   methods: {
     change(i) {
       this.num = i;
+    },
+    citychoise() {
+      this.$router.push("/city");
+    }
+  },
+  computed: {
+    city() {
+      return this.$store.state.moduleCity.state.city;
     }
   }
 };

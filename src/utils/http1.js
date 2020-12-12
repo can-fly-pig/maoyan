@@ -12,21 +12,24 @@ const http = {
     }
     return fetch(preUrl + url).then(response => response.json());
   },
-  post(url,parmas) {
+  post(url, parmas) {
     return fetch(preUrl + url, {
-      method: 'POST',
+      method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
       body: qs.stringify({
-        ids:parmas
+        ids: parmas
       })
-    }).then(res => res.json())
-    .then(json => {if(json.status === 0){
-      return json
-    }else{
-      console.log(json.msg);
-    }})
+    })
+      .then(res => res.json())
+      .then(json => {
+        if (json.status === 0) {
+          return json;
+        } else {
+          console.log(json.msg);
+        }
+      });
   }
 };
 

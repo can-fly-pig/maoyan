@@ -6,5 +6,5 @@ export const getMovieApi = function(data) {
   return http.get("/movies/list", data);
 };
 export const getMovieMoreApi = function(data) {
-  return http.post("/movies/more",data);
+  return http.post("/movies/more", data);
 };

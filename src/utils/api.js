@@ -15,3 +15,11 @@ export const getMovieApi = function(res) {
 export const getMovieMoreApi = function(res) {
   return http.post("/movies/more", res);
 };
+//post请求详情页
+export const getMovieDetail = function(params) {
+  return http.post("/movies/detail", params);
+};
+//get请求城市页面
+export const getCityApi = function(res) {
+  return http.get("/area/list", res);
+};

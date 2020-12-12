@@ -1,5 +1,5 @@
 <template>
-  <li class="items">
+  <li class="items" @click="goToDetail([item.movieid, item.nm])">
     <img :src="item.img | filter" alt="" />
     <div class="movie-info">
       <h3>{{ item.nm }}</h3>
@@ -18,11 +18,26 @@
 <script>
 export default {
   props: {
-    item: Object
+    item: Object,
+    id:String
   },
   filters: {
     filter(val) {
       return val.split("/w.h").join("");
+    }
+  },
+  inject: ["ids"],
+  methods: {
+    goToDetail([id, nm]) {
+      //路由传值第一种方法
+      // this.$router.push({
+      //   path: `/detail/${movieId}`,
+      // })
+      //第二种方法
+      this.$router.push({
+        name: "detail",
+        params: { movieId: id, movieName: nm, IdAll: this.ids }
+      });
     }
   }
 };

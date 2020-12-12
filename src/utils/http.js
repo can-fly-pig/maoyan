@@ -13,22 +13,22 @@ const http = {
     }
     return fetch(urls + backurl).then(response => response.json());
   },
-  post(url,params) {
+  post(url, params) {
     return fetch(urls + url, {
-      method: 'POST',
+      method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded"
       },
       body: qs.stringify(params)
     })
-        .then(res => res.json())
-        .then(res => {
-          if(res.status == 0) {
-            return res;
-          }else {
-            console.log(res.msg);
-          }
-        })
+      .then(res => res.json())
+      .then(res => {
+        if (res.status == 0) {
+          return res;
+        } else {
+          console.log(res.msg);
+        }
+      });
   }
 };
 
